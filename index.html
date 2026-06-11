@@ -1,15 +1,118 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Dynamic Component Library</title>
-    <style>
-   
-    </style>
-  </head>
-  <body>
-    <h1>hello world</h1>
-  </body>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Book Cover Mockup Generator</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col justify-between">
+
+    <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur py-4 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold tracking-wide bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+                CoverCraft <span class="text-xs text-slate-500 font-normal">v1.0</span>
+            </h1>
+            <span class="text-xs bg-blue-500/10 text-blue-400 px-2.5 py-1 rounded-full font-medium border border-blue-500/20">
+                About Us
+            </span>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-12 w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center flex-grow">
+        
+        <div class="space-y-6">
+            <div class="space-y-2">
+                <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">
+                    আপনার ২D ছবিকে দিন <br>
+                    <span class="bg-gradient-to-r from-blue-400 to-teal-400 bg-clip-text text-transparent">প্রফেশনাল ৩D লুক</span>
+                </h2>
+                <p class="text-slate-400 text-sm sm:text-base">
+                    নিচের ইনপুটে আপনার বইয়ের কভারের ইমেজটি আপলোড করুন। সিএসএস ৩D ট্রান্সফর্মের মাধ্যমে সেটি মুহূর্তেই একটি বাস্তবসম্মত বইয়ে রূপান্তর হবে।
+                </p>
+            </div>
+
+            <div class="bg-slate-800/50 border-2 border-dashed border-slate-700 hover:border-blue-500/50 rounded-2xl p-8 text-center transition-all duration-300 relative group">
+                <input type="file" id="imageInput" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                <div class="space-y-3 pointer-events-none">
+                    <div class="w-12 h-12 bg-blue-500/10 text-blue-400 rounded-xl flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
+                        </svg>
+                    </div>
+                    <div class="text-sm font-medium text-slate-300">
+                        ক্লিক করুন অথবা ছবি এখানে ড্র্যাগ করুন
+                    </div>
+                    <p class="text-xs text-slate-500">PNG, JPG বা JPEG (রেশিও ৩:৪ হলে সবচেয়ে ভালো দেখায়)</p>
+                </div>
+            </div>
+
+            <div id="fileInfo" class="hidden items-center gap-2 bg-slate-800/40 p-3 rounded-xl border border-slate-700/50 text-xs text-slate-400">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-emerald-400 shrink-0">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span id="fileName" class="truncate font-mono">image.jpg</span> আপলোড হয়েছে!
+            </div>
+        </div>
+
+        <div class="flex items-center justify-center bg-slate-950/40 rounded-3xl p-8 border border-slate-800/50 shadow-2xl shadow-blue-500/5 min-h-[450px]">
+            
+            <div class="scene">
+                <div class="book" id="bookObject">
+                    
+                    <div class="book-front">
+                        <div id="coverTexture" class="book-cover-img"></div>
+                        <div class="cover-overlay"></div>
+                    </div>
+                    
+                    <div class="book-spine"></div>
+                    
+                    <div class="book-back"></div>
+                    
+                    <div class="book-pages"></div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="border-t border-slate-800/60 bg-slate-950/20 py-4 text-center text-xs text-slate-500">
+        &copy; 2026 CoverCraft Studio. Built with CSS 3D Transforms.
+    </footer>
+
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const coverTexture = document.getElementById('coverTexture');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const bookObject = document.getElementById('bookObject');
+
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(event) {
+                    // সেট করা ইমেজ কভার ব্যাকগ্রাউন্ড হিসেবে এসাইন করা হচ্ছে
+                    coverTexture.style.backgroundImage = `url('${event.target.result}')`;
+                    coverTexture.style.backgroundColor = 'transparent'; // ডিফল্ট কালার রিমুভ
+                    
+                    // UI ইনফো আপডেট
+                    fileName.textContent = file.name;
+                    fileInfo.classList.remove('hidden');
+                    fileInfo.classList.add('flex');
+                    
+                    // আপলোডের পর একটু অ্যানিমেশন টুইস্ট দেওয়া
+                    bookObject.style.transform = 'rotateY(-25deg) rotateX(10deg) scale(1.05)';
+                    setTimeout(() => {
+                        bookObject.style.transform = 'rotateY(-20deg) rotateX(8deg)';
+                    }, 400);
+                }
+                
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
 </html>

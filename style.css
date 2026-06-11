@@ -1,0 +1,123 @@
+/* ==========================================================================
+   3D BOOK CORE ARCHITECTURE
+   ========================================================================== */
+
+/* 3D এনভায়রনমেন্ট তৈরি করার জন্য স্টেজ */
+.scene {
+    width: 260px;
+    height: 380px;
+    perspective: 1200px; /* থ্রিডি ডেপথ ফিল্ড নির্ধারণ করে */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* মেইন বুক অবজেক্ট কন্টেইনার */
+.book {
+    width: 260px;
+    height: 360px;
+    position: relative;
+    transform-style: preserve-3d;
+    /* ডিফল্ট এঙ্গেল যাতে সুন্দর একটি আইসোমেট্রিক ভিউ পাওয়া যায় */
+    transform: rotateY(-20deg) rotateX(8deg);
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* মাউস হোভার করলে বইটি হালকা মুভ করবে প্রফেশনাল ফিল দেওয়ার জন্য */
+.scene:hover .book {
+    transform: rotateY(-10deg) rotateX(5deg) scale(1.02);
+}
+
+/* কমন সাইড প্রোপার্টিজ */
+.book-front, .book-back, .book-spine, .book-pages {
+    position: absolute;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+/* ==========================================================================
+   FRONT COVER (সামনের অংশ)
+   ========================================================================== */
+.book-front {
+    width: 260px;
+    left: 0;
+    top: 0;
+    transform: translateZ(15px); /* স্পাইনের থিকনেস অনুযায়ী সামনে এগিয়ে আনা */
+    z-index: 2;
+    border-radius: 2px 4px 4px 2px;
+    background-color: #1e293b;
+    box-shadow: inset -4px 0px 10px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+/* ডায়নামিক টেক্সচার হোল্ডার */
+.book-cover-img {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    /* ইউজার ছবি দেওয়ার আগে একটি ডিফল্ট সলিড গ্রেডিয়েন্ট টেক্সচার */
+    background-image: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    transition: background 0.3s ease;
+}
+
+/* প্রফেশনাল লাইটিং ও গ্লসি ওভারলে */
+.cover-overlay {
+    position: absolute;
+    inset: 0;
+    /* বামপাশে বইয়ের ভাঁজের শ্যাডো এবং ডানপাশে হালকা গ্লসি হাইলাইট */
+    background: linear-gradient(to right, 
+        rgba(0,0,0,0.4) 0%, 
+        rgba(0,0,0,0.0) 3%, 
+        rgba(255,255,255,0.08) 5%, 
+        rgba(255,255,255,0.0) 25%, 
+        rgba(0,0,0,0.15) 96%, 
+        rgba(0,0,0,0.5) 100%
+    );
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   BOOK SPINE (বইয়ের পাশ/বাঁধাইয়ের অংশ)
+   ========================================================================== */
+.book-spine {
+    width: 30px; /* বইয়ের পুরুত্ব */
+    left: -15px; /* স্পাইনকে ঠিক সেন্টারে পজিশন করা */
+    background: linear-gradient(to right, #1a419c 0%, #2563eb 50%, #1e40af 100%);
+    transform: rotateY(-90deg);
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
+    border-radius: 2px 0 0 2px;
+}
+
+/* ==========================================================================
+   BOOK PAGES (ভেতরের পাতার থ্রিডি ইলিউশন)
+   ========================================================================== */
+.book-pages {
+    width: 28px;
+    right: -13px;
+    background: #f8fafc;
+    transform: rotateY(90deg);
+    /* মাল্টিপল লাইনার গ্রেডিয়েন্ট দিয়ে পেজের লাইনের ফিল আনা */
+    background-image: repeating-linear-gradient(90deg, 
+        transparent, 
+        transparent 1px, 
+        rgba(0, 0, 0, 0.08) 1px, 
+        rgba(0, 0, 0, 0.08) 3px
+    );
+    box-shadow: inset 3px 0 6px rgba(0,0,0,0.1);
+}
+
+/* ==========================================================================
+   BACK COVER (পেছনের অংশ ও শ্যাডো)
+   ========================================================================== */
+.book-back {
+    width: 260px;
+    background: #1e3a8a;
+    transform: rotateY(180deg) translateZ(15px);
+    /* বাস্তবসম্মত ড্রপ শ্যাডো তৈরি করা */
+    box-shadow: 
+        -10px 15px 30px rgba(0, 0, 0, 0.5),
+        -30px 30px 50px rgba(0, 0, 0, 0.3),
+        1px 1px 2px rgba(0,0,0,0.2);
+}
